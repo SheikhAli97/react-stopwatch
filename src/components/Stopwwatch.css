@@ -1,0 +1,126 @@
+
+
+* {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+  :root {
+    --bg-color: #000000;
+    --start-btn-bg-color: rgba(48, 209, 88, 0.2);
+    --start-btn-text-color: rgb(48, 209, 88);
+    --start-btn-active-color: rgba(48, 209, 88, 0.1);
+    --stop-btn-bg-color: rgba(255, 69, 58, 0.2);
+    --stop-btn-text-color: rgb(255, 69, 58);
+    --stop-btn-active-color: rgba(255, 69, 58, 0.15);
+    --reset-btn-bg-color: #49494c;
+    --reset-btn-text-color: #fff;
+    --reset-btn-active-color: #222223;
+    --lap-btn-bg-color: rgba(73, 73, 76, 0.5);
+  }
+  
+  .wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .main {
+    height: 812px;
+    width: 375px;
+    background-color: var(--bg-color);
+  }
+  
+  .fastest-lap {
+    color: var(--start-btn-text-color)
+  }
+  
+  .slowest-lap {
+    color: var(--stop-btn-text-color)
+  }
+  
+  
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 20px ;
+  }
+  
+  
+  
+  .main-timer {
+    display: flex;
+    justify-content: center;
+    height: 50%; 
+    align-items: center;
+  font-variant-numeric: tabular-nums;
+    font-weight: 100;
+    font-size: 2cm;
+    color: aliceblue;
+    user-select: none;
+  }
+  
+  .lap-button {
+    background-color: var(--reset-btn-bg-color);
+    color: var(--reset-btn-text-color);
+  }
+  
+  .start-button {
+    background-color: var(--start-btn-bg-color);
+    color: var(--start-btn-text-color);
+  }
+  
+  .stop-button {
+    background-color: var(--stop-btn-bg-color);
+    color: var(--stop-btn-text-color);
+  }
+  
+  .initial-lap{
+    background-color:#49494c;
+    color: var(--reset-btn-text-color);
+  }
+  button {
+    display: block;
+    height: 70px;
+    width: 70px;
+    outline: 1px solid black;
+    outline-offset: -3px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  tr {
+    display: flex;
+    margin-top: 10px;
+    border-bottom: .5px solid var(--reset-btn-bg-color);
+    color: #fff;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center; 
+    height: 30px;
+    font-size: 1rem;
+    font-weight: 400;
+    
+  } 
+  
+  .laps-table{
+    display: flex;
+    width: 100%;
+    margin-top: 2rem;
+  }
+  
+
+  
+  
+  tbody {
+    width: 100%; 
+    padding: 0 1rem;
+  
+  }
+  
