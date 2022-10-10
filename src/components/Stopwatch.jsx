@@ -3,7 +3,7 @@ import "./Stopwwatch.css";
 
 function Stopwatch() {
   const [totalTime, setTotalTime] = useState(0);
-  let [watchIsOn, setWatchIsOn] = useState(false);
+  const [watchIsOn, setWatchIsOn] = useState(false);
 
   const formatTime = (time) => {
     let formattedMilliseconds = 0;
@@ -11,8 +11,8 @@ function Stopwatch() {
     let formattedMinutes = 0;
     let formattedTime = [];
     let finalTime = ``;
-    formattedMilliseconds = time % 100;
-    formattedSeconds = Math.floor(time / 100);
+    formattedMilliseconds = time % 1000;
+    formattedSeconds = Math.floor(time / 1000);
     formattedMinutes = Math.floor(formattedSeconds / 60);
 
     formattedSeconds = formattedSeconds % 60;
@@ -28,45 +28,50 @@ function Stopwatch() {
   };
 
   const padNumber = (time) => {
-    return time.toString().padStart(2, "0");
+    return time.toString().padStart(2, "0").substring(0,2);
   };
 
-  function toggleWatchStatus() 
+  const toggleWatchStatus =() => 
   {
     setWatchIsOn(!watchIsOn);
   }
 
-const reset = () =>{
-  setTotalTime(0); 
+const handleReset = () =>{
+   setTotalTime(0);
   setWatchIsOn(false);
 }
 
-function startTime(){
+const startTime =()=>{
   toggleWatchStatus();
+}
+
+const calculateLap =  () => {
+console.log('calculate lap')
 }
 
 
 
 
+useEffect(() => {
+  let intervalID;
 
-  useEffect(() => {
-    let intervalID;
-    let initialTime = Date.now
+  
+  if (watchIsOn) {
+    const initialTime = Date.now() - totalTime;
+    intervalID = setInterval(() => {
 
-    if (watchIsOn) {
-      intervalID = setInterval(() => {
-        setTotalTime((totalTime) => totalTime + 1);
-        console.log(totalTime)
+        const currentTime = Date.now()
+        const elapsedTime = currentTime - initialTime; 
+        setTotalTime(elapsedTime);
+       console.log(elapsedTime)
+      
       }, 10);
     } 
 
-    if (!watchIsOn) {
-      clearInterval(intervalID)
-    }
 
 
     return () => clearInterval(intervalID);
-  }, [watchIsOn, totalTime]); //run use effect if watch status or time changes
+  }, [watchIsOn]); //run use effect if watch status or time changes
 
 
 
@@ -83,13 +88,14 @@ function startTime(){
           </div>
           <div className="button-container">
             <div className="button-wrapper">
-              <button id="reset" className="initial-lap">
-                Lap
+              <button id="reset" className='initial-lap' onClick={watchIsOn ? calculateLap : handleReset}>
+                { watchIsOn ? 'Lap' : 'Reset' && totalTime === 0 ? 'Lap' : 'Reset'}
+                
               </button>
             </div>
             <div className="button-wrapper">
-              <button id="start" className="start-button" onClick={startTime}>
-                Start
+              <button id="start" className={watchIsOn ? "stop-button" : "start-button"} onClick={startTime}>
+                {watchIsOn ? 'Stop' : 'Start'}
               </button>
             </div>
           </div>
