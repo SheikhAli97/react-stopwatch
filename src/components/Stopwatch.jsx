@@ -7,12 +7,11 @@ function Stopwatch() {
 
   const [lapState, setLapState] = useState({
     laps: [],
-    runningTime: 0,
+    currentLapTime: 0,
     totalLapTime: 0,
-    slowestLap: [],
-    fastestLap: [],
+    slowestLap: -1,
+    fastestLap: Infinity,
   });
-  
 
   const padNumber = (time) => Math.floor(time).toString().padStart(2, "0");
 
@@ -33,15 +32,56 @@ function Stopwatch() {
     setTotalTime(0);
     setLapState({
       laps: [],
-      runningTime: 0,
+      currentLapTime: 0,
       totalLapTime: 0,
-      slowestLap: [],
-      fastestLap: [],
+      slowestLap: -1,
+      fastestLap: Infinity,
     });
   };
 
   const startTime = () => {
     toggleWatchStatus();
+  };
+
+  const checkFastestSlowestLap = () => {
+    if (lapState.currentLapTime > lapState.slowestLap) {
+      // lapState.slowestLap = lapState.currentLapTime;
+      setLapState((previousLapState) => {
+        console.log("slowest: ", previousLapState.currentLapTime);
+        console.log(
+          previousLapState.laps.indexOf(previousLapState.currentLapTime)
+        );
+        return {
+          ...previousLapState,
+          slowestLap: previousLapState.currentLapTime,
+        };
+      });
+    }
+    if (lapState.currentLapTime < lapState.fastestLap) {
+      setLapState((previousLapState) => {
+        console.log("fatest: ", previousLapState.currentLapTime);
+        return {
+          ...previousLapState,
+          fastestLap: previousLapState.currentLapTime,
+        };
+      });
+    }
+  };
+
+  const addClasses = (index) => {
+    if (lapState.laps.length >= 2) {
+      const slowestIndex = lapState.laps.indexOf(lapState.slowestLap);
+      const fastestIndex = lapState.laps.indexOf(lapState.fastestLap);
+      console.log("slowest index", slowestIndex);
+      console.log("fastest index", fastestIndex);
+      if (slowestIndex === index) {
+        return "slowest-lap";
+      }
+      if (fastestIndex === index) {
+        return "fastest-lap";
+      }
+      return "";
+    }
   };
 
   //check if lap button has been clicked.
@@ -57,7 +97,7 @@ function Stopwatch() {
         setTotalTime(elapsedTime);
         setLapState((previousLapState) => ({
           ...previousLapState,
-          runningTime: elapsedTime - previousLapState.totalLapTime,
+          currentLapTime: elapsedTime - previousLapState.totalLapTime,
         }));
       }, 10);
     }
@@ -70,13 +110,12 @@ function Stopwatch() {
     if (totalTime > 0) {
       setLapState((previousLapData) => ({
         ...previousLapData,
-        laps: [...previousLapData.laps, lapState.runningTime],
+        laps: [lapState.currentLapTime, ...previousLapData.laps],
         totalLapTime:
-          previousLapData.totalLapTime + previousLapData.runningTime,
+          previousLapData.totalLapTime + previousLapData.currentLapTime,
       }));
     }
-
-    console.log(lapState);
+    checkFastestSlowestLap();
   };
 
   return (
@@ -119,14 +158,14 @@ function Stopwatch() {
                 {(watchIsOn || totalTime > 0) && (
                   <tr className="table-row">
                     <td> Lap {lapState.laps.length + 1}</td>
-                    <td> {formatTime(lapState.runningTime)}</td>
+                    <td> {formatTime(lapState.currentLapTime)}</td>
                   </tr>
                 )}
 
                 {lapState.laps.map((lap, index) => {
                   return (
-                    <tr key={index} className="table-row">
-                      <td>Lap {index + 1}</td>
+                    <tr key={index} className={addClasses(index)}>
+                      <td>Lap {lapState.laps.length - index}</td>
                       <td>{formatTime(lap)}</td>
                     </tr>
                   );
