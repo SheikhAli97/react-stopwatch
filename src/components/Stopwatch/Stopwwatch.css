@@ -31,6 +31,7 @@
   height: 812px;
   width: 375px;
   background-color: var(--bg-color);
+  border-radius: 5%;
 }
 
 .fastest-lap {
@@ -102,7 +103,7 @@ tr {
   align-items: center;
   height: 45px;
   font-size: 1rem;
-  font-weight: 200;
+  font-weight: 300;
   font-variant-numeric: tabular-nums;
 }
 

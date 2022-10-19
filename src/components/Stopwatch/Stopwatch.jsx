@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import Buttons from "../Buttons/Buttons";
+import Laps from "../Laps/Laps";
+import { formatTime } from "../utils";
 import "./Stopwwatch.css";
 
 function Stopwatch() {
@@ -12,17 +15,6 @@ function Stopwatch() {
     slowestLap: -1,
     fastestLap: Infinity,
   });
-
-  const padNumber = (time) => Math.floor(time).toString().padStart(2, "0");
-
-  const formatTime = (elapsedTime) => {
-    const centiseconds = (elapsedTime % 1000) / 10;
-    const seconds = (elapsedTime / 1000) % 60;
-    const minutes = (elapsedTime / (1000 * 60)) % 60;
-    return `${padNumber(minutes)}:${padNumber(seconds)}.${padNumber(
-      centiseconds
-    )}`;
-  };
 
   const toggleWatchStatus = () => {
     setWatchIsOn(!watchIsOn);
@@ -47,10 +39,6 @@ function Stopwatch() {
     if (lapState.currentLapTime > lapState.slowestLap) {
       // lapState.slowestLap = lapState.currentLapTime;
       setLapState((previousLapState) => {
-        console.log("slowest: ", previousLapState.currentLapTime);
-        console.log(
-          previousLapState.laps.indexOf(previousLapState.currentLapTime)
-        );
         return {
           ...previousLapState,
           slowestLap: previousLapState.currentLapTime,
@@ -59,7 +47,6 @@ function Stopwatch() {
     }
     if (lapState.currentLapTime < lapState.fastestLap) {
       setLapState((previousLapState) => {
-        console.log("fatest: ", previousLapState.currentLapTime);
         return {
           ...previousLapState,
           fastestLap: previousLapState.currentLapTime,
@@ -72,8 +59,6 @@ function Stopwatch() {
     if (lapState.laps.length >= 2) {
       const slowestIndex = lapState.laps.indexOf(lapState.slowestLap);
       const fastestIndex = lapState.laps.indexOf(lapState.fastestLap);
-      console.log("slowest index", slowestIndex);
-      console.log("fastest index", fastestIndex);
       if (slowestIndex === index) {
         return "slowest-lap";
       }
@@ -125,54 +110,11 @@ function Stopwatch() {
           <div id="timer" className="main-timer">
             {formatTime(totalTime)}
           </div>
-          <div className="button-container">
-            <div className="button-wrapper">
-              <button
-                id="reset"
-                className="initial-lap button"
-                onClick={watchIsOn ? addLap : handleReset}
-              >
-                {watchIsOn
-                  ? "Lap"
-                  : "Reset" && totalTime === 0
-                  ? "Lap"
-                  : "Reset"}
-              </button>
-            </div>
-            <div className="button-wrapper">
-              <button
-                id="start"
-                className={
-                  watchIsOn ? "stop-button button" : "start-button button"
-                }
-                onClick={startTime}
-              >
-                {watchIsOn ? "Stop" : "Start"}
-              </button>
-            </div>
-          </div>
+          <Buttons
+            state={{ watchIsOn, addLap, handleReset, totalTime, startTime }}
+          />
 
-          <div className="laps-container">
-            <table id="laps-table" className="laps-table">
-              <tbody>
-                {(watchIsOn || totalTime > 0) && (
-                  <tr className="table-row">
-                    <td> Lap {lapState.laps.length + 1}</td>
-                    <td> {formatTime(lapState.currentLapTime)}</td>
-                  </tr>
-                )}
-
-                {lapState.laps.map((lap, index) => {
-                  return (
-                    <tr key={index} className={addClasses(index)}>
-                      <td>Lap {lapState.laps.length - index}</td>
-                      <td>{formatTime(lap)}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+          <Laps state={{ watchIsOn, totalTime, lapState, addClasses }} />
         </div>
       </div>
     </div>
