@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Buttons from "../Buttons/Buttons";
 import Laps from "../Laps/Laps";
 import { formatTime } from "../utils";
-import "./Stopwwatch.css";
+import "./Stopwatch.css";
 
 function Stopwatch() {
   const [totalTime, setTotalTime] = useState(0);
@@ -54,6 +54,10 @@ function Stopwatch() {
       });
     }
   };
+
+
+
+
 
   const addClasses = (index) => {
     if (lapState.laps.length >= 2) {
@@ -111,7 +115,7 @@ function Stopwatch() {
             {formatTime(totalTime)}
           </div>
           <Buttons
-            state={{ watchIsOn, addLap, handleReset, totalTime, startTime }}
+            state={{ watchIsOn, addLap, handleReset, totalTime, startTime}}
           />
 
           <Laps state={{ watchIsOn, totalTime, lapState, addClasses }} />
